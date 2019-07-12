@@ -1,31 +1,46 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    
+
 </head>
+
 <body>
     <div id="debug"></div>
     <script>
-        
+        // function displayTime(){
+        //     debug.innerText = Date();
+        // }
+
+        // setInterval(displayTime,1000);
+
+
+        setInterval( () => {
+            debug.innerText = Date();
+        }, 1000)
+    </script>
+    <script>
+
         // test();
-        
+
         // function test() {
         //     alert("OK");
         // }
-        
+
         // test();
-        
+
         // ------------------------------
-        
+
         // test();  // wrong
-        
+
         var test = function () {
             alert("test");
         }
-        
-        
+
+
         test();  // OK
-        
+
     </script>
 </body>
+
 </html>

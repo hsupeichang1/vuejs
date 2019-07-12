@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/jquery.toast.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.toast.js"></script>
     <style>
         .modal-header,
         h4,
@@ -20,7 +23,8 @@
         .modal-footer {
             background-color: #f9f9f9;
         }
-        .deleteItem{
+
+        .deleteItem {
             margin-left: 5px;
         }
     </style>
@@ -90,7 +94,15 @@
 
                         //刪除
                         deleteBtn: function (i) {
+                            $.ajax({
+                                type:"delete",
+                                url:"http://localhost/home/news",
+                                data:app.newsList[i],
+                            }).then(function(){
+                                downloadNewsList();
+                            });
                             this.newsList.splice(i, 1);
+
                         }
                     }
                 });
@@ -173,6 +185,15 @@
                         //修改
                         app.newsList[idx].title = this.title;
                         app.newsList[idx].ymd = this.ymd;
+
+                        //資料庫修改
+                        $.ajax({
+                            type:"put",
+                            url:"http://localhost/home/news",
+                            data:app.newsList[idx],
+                        }).then(function(){
+                            downloadNewsList();
+                        });
                     } else {
                         //新增資料 index-1
                         let newNewsItem = {
@@ -180,20 +201,42 @@
                             ymd: this.ymd
                         }
                         app.newsList.push(newNewsItem);
+
+                        $.ajax({
+                            type: "post",
+                            url: "http://localhost/home/news",
+                            contentType: "application/json",
+                            //轉為JSON格式才能成功輸入資料庫
+                            data: JSON.stringify(newNewsItem),
+                            success: function () {
+                                downloadNewsList();
+                            }
+                        })
                     }
                     $("#newsModal").modal("hide");
                 }
             }
         })
+
+        //從資料庫取資料get
+        //$.get("url",plan);
+        function downloadNewsList() {
+            $.get("http://localhost/home/news", function (e) {
+                //JSON字串轉換成 JavaScript的數值或是物件
+                app.newsList = JSON.parse(e);
+            });
+        }
+        downloadNewsList();
+
+
+
     </script>
 
 
     <!-- ========== UI 與 JavaScript 分隔線 ========== -->
 
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/jquery.toast.js"></script>
+
 
 
 </body>
