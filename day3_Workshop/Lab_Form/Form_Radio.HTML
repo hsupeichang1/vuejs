@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<form class="form-horizontal" id="lab">
+  <fieldset>
+
+    <!-- Form Name -->
+    <legend>Form Name</legend>
+
+    <!-- Multiple Radios (inline) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="bloodType">Inline Radios</label>
+      <div class="col-md-4">
+        <label class="radio-inline" for="bloodType-1">
+          <input type="radio" v-model="bloodType" name="bloodType" id="bloodType-1" value="1" checked="checked">
+          A
+        </label>
+        <label class="radio-inline" for="bloodType-2">
+          <input type="radio" v-model="bloodType" name="bloodType" id="bloodType-2" value="2">
+          B
+        </label>
+        <label class="radio-inline" for="bloodType-3">
+          <input type="radio" v-model="bloodType" name="bloodType" id="bloodType-3" value="3">
+          AB
+        </label>
+        <label class="radio-inline" for="bloodType-4">
+          <input type="radio" v-model="bloodType" name="bloodType" id="bloodType-4" value="4">
+          O
+        </label>
+
+      </div>
+    </div>
+
+  </fieldset>
+  <h3>BloodType: {{ bloodType }}</h3>
+</form>
+
+
+
+    
+
+<script>
+    var labApp = new Vue({
+            el: "#lab",
+            data: {
+                bloodType: 1
+            },
+            mounted() {//下載資料
+                this.bloodType = 4;
+            }
+        })
+</script>
+
+</body>
+</html>
