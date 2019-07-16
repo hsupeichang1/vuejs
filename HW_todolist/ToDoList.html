@@ -26,13 +26,34 @@
         #titleTextBox{
             text-decoration: none;
             outline: none;
-             border: none;
+            border: none;
+            background-color: #f2f2f2;
+        }
+        #todoList .inputTask{
+            background-color: #f2f2f2;
+            padding:20px;
+        }
+        .list-group-item{
+            padding:20px;
+        }
+
+        .list-group-item:hover{
+
+            opacity:.6;
+        }
+
+        .list-group .done{
+            opacity:.5;
+            text-decoration-line: line-through;
+            background-color: #f9f9f9;
+        }
+
+        .list-group .done::before{
+            
         }
 
     
-        .item_toggle--completed {
-            text-decoration: line-through;
-        }
+        
 
 
     </style>
@@ -45,9 +66,9 @@
         <!-- // mark: news list ui -->
         <div class="row">
             <div class="col-sm-4" id="todoList">
-                <h2>Tasks ({{testData}})</h2>
-                <div class="list-group-item">
-                    <input type="text" v-model="title" id="titleTextBox" placeholder="請輸入標題">
+                <h2>Tasks <small v-if="incomplete">({{ incomplete }})</small></h2>
+                <div class="list-group-item inputTask">
+                    <input type="text" v-model="title" id="titleTextBox" placeholder="Add to the todo list">
                     <span class="pull-right">
                         <button id="okItem" v-on:click="okItemClick()" class="btn btn-success btn-sm "><span
                                 class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
@@ -57,7 +78,7 @@
 
 
                 <ul id="listItem" class="list-group">
-                    <li class="item_toggle list-group-item " v-for="(item, index) in todoList">
+                    <li class="list-group-item" v-for="(item, index) in todoList" v-bind:class="item.done ? 'done' : '' ">
                         {{ item.title }}
                         <span class="pull-right">
                             <button class="btn btn-info btn-xs editItem" v-on:click="completedClick(index)">
@@ -78,54 +99,6 @@
 
 
 
-    <!-- 對話盒 -->
-    <!-- // mark: dialog ui -->
-    <!-- <div id="newsModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4>新增/修改</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="titleTextBox">
-                                <span class="glyphicon glyphicon-bullhorn"></span>
-                                標題
-                            </label>
-                            <input type="text" v-model="title" id="titleTextBox" class="form-control"
-                                placeholder="請輸入標題" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="ymdTextBox">
-                                <span class="glyphicon glyphicon-time"></span>
-                                日期
-                            </label>
-                            <input type="text" v-model="ymd" id="ymdTextBox" class="form-control"
-                                placeholder="yyyy-mm-dd 例如: 2017-05-20">
-                        </div>
-
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-right">
-                        <button type="button" id="okButton" v-on:click="okButtonClick" class="btn btn-success">
-                            <span class="glyphicon glyphicon-ok"></span> 確定
-                        </button>
-                        <button type="button" id="cancelButton" class="btn btn-default" data-dismiss="modal">
-                            <span class="glyphicon glyphicon-remove"></span> 取消
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- /對話盒 -->
-
-
     <!-- ========== UI 與 JavaScript 分隔線 ========== -->
 
 
@@ -142,10 +115,10 @@
                 todoIndex: 0,
                 todoList:
                     [
-                        { title: "Item 1", completed: false },
-                        { title: "Item 2", completed: false },
-                        { title: "Item 3", completed: false },
-                        { title: "Item 4", completed: false }
+                        { title: "Item 1", done: true },
+                        { title: "Item 2", done: false },
+                        { title: "Item 3", done: false },
+                        { title: "Item 4", done: false }
                     ]
 
             },
@@ -155,6 +128,7 @@
                     var str = this.title.length;
                     var objNew = {
                         title: this.title,
+                        done: false
                     }
                     if (str > 0) {
                         todoApp.todoList.push(objNew);
@@ -167,7 +141,19 @@
                     this.todoList.splice(e, 1);
                 },
                 completedClick: function (e) {
-                    this.todoList.completed = true;
+                       this.todoList[e].done = !this.todoList[e].done;  
+                },
+                iscompleted(e){
+                    return todoList.done;
+                },
+                inProgress(e) {
+                    return !this.iscompleted(e);
+                }
+                
+            },
+            computed: {
+                incomplete() {
+                  return this.todoList.filter(this.inProgress).length;
                 }
             }
         })
